@@ -5,7 +5,7 @@ var x = 100;
 var y = 100;
 
 for (var i = 1; i < 100000; i++) {
-    var r = Math.random() * 3
+    var r = Math.round(Math.random() * 2) + 1;
     var ux = 150
     var uy = 30
 
