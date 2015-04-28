@@ -1,4 +1,3 @@
-///<reference path="../SmallBasic/GraphicsWindow.ts" />
 GraphicsWindow.Height = 800;
 GraphicsWindow.Width = 800;
 GraphicsWindow.BackgroundColor = "Black";

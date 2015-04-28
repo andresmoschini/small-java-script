@@ -1,6 +1,4 @@
-﻿/// <reference path="../SmallJavaScript/GraphicsArea.ts" />
-
-module SmallBasic {
+﻿module SmallBasic {
     export var GetGraphicsWindowCanvas = () => {
         var canvas = <HTMLCanvasElement>document.getElementById("GraphicsWindow");
         if (canvas == null) {
