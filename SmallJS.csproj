@@ -37,6 +37,7 @@
     <None Include="SmallBasicExamples\TreeFractal.sb" />
     <None Include="SmallBasicExamples\WhileLoop.sb" />
     <TypeScriptCompile Include="SmallJavaScript\GraphicsArea.ts" />
+    <TypeScriptCompile Include="Utils\csscolorparser.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>

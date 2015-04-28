@@ -7,35 +7,76 @@
         }
 
         protected _canvas: HTMLCanvasElement;
-        protected get Canvas(): HTMLCanvasElement { return null; }
+        protected get Canvas(): HTMLCanvasElement { return this._canvas; }
+        protected get RenderingContext(): CanvasRenderingContext2D { return this.Canvas.getContext("2d"); }
 
         /** Gets or sets the Background color of the Graphics Window. */
-        public get BackgroundColor(): string { return null; }
-        public set BackgroundColor(value: string) { }
+        public get BackgroundColor(): string {
+            return this.Canvas.style.backgroundColor;
+        }
+        public set BackgroundColor(value: string) {
+            this.Canvas.style.backgroundColor = value;
+        }
 
         /** Gets or sets the brush color to be used to fill shapes drawn on the Graphics Window. */
-        public get BrushColor(): string { return null; }
-        public set BrushColor(value: string) { }
+        public get BrushColor(): string {
+            return this.RenderingContext.strokeStyle;
+        }
+        public set BrushColor(value: string) {
+            this.RenderingContext.strokeStyle = value;
+        }
 
         /** Specifies whether or not the Graphics Window can be resized by the user. */
-        public get CanResize(): boolean { return null; }
-        public set CanResize(value: boolean) { }
+        public get CanResize(): boolean {
+            return false;
+        }
+        public set CanResize(value: boolean) {
+            //TODO
+        }
 
+        private updateFont() {
+            this.RenderingContext.font = `${this.FontBold ? "bold " : ""}${this.FontItalic ? "italic " : ""}${this.FontSize || 10}px ${this.FontName}`;
+        }
+
+        private _fontBold: boolean;
         /** Gets or sets whether or not the font to be used when drawing text on the Graphics Window, is bold. */
-        public get FontBold(): boolean { return null; }
-        public set FontBold(value: boolean) { }
+        public get FontBold(): boolean {
+            return this._fontBold;
+        }
+        public set FontBold(value: boolean) {
+            this._fontBold = value;
+            this.updateFont();
+        }
 
+        private _fontItalic: boolean;
         /** Gets or sets whether or not the font to be used when drawing text on the Graphics Window, is italic. */
-        public get FontItalic(): boolean { return null; }
-        public set FontItalic(value: boolean) { }
+        public get FontItalic(): boolean {
+            return this._fontItalic;
+        }
+        public set FontItalic(value: boolean) {
+            this._fontItalic = value;
+            this.updateFont();
+        }
 
+        private _fontName: string;
         /** Gets or sets the Font Name to be used when drawing text on the Graphics Window. */
-        public get FontName(): string { return null; }
-        public set FontName(value: string) { }
+        public get FontName(): string {
+            return this._fontName;
+        }
+        public set FontName(value: string) {
+            this._fontName = value;
+            this.updateFont();
+        }
 
+        private _fontSize: number;
         /** Gets or sets the Font Size to be used when drawing text on the Graphics Window. */
-        public get FontSize(): number { return null; }
-        public set FontSize(value: number) { }
+        public get FontSize(): number {
+            return this._fontSize;
+        }
+        public set FontSize(value: number) {
+            this._fontSize = value;
+            this.updateFont();
+        }
 
         /** Gets or sets the Height of the graphics window. */
         public get Height(): number {
@@ -302,12 +343,34 @@
         public void Hide()
         */
 
+        private memoize<TR,TP>(func: (p: TP) => TR) {
+            var memoize = function (key) {
+                var cache = (<any>memoize).cache;
+                if (!cache.hasOwnProperty(key)) {
+                    cache[key] = func.apply(this, arguments);
+                }
+                return cache[key];
+            };
+            (<any>memoize).cache = {};
+            return <(p: TP) => TR>memoize;
+        }
+
+        private parseCSSColor = this.memoize(Utils.parseCSSColor);
+
         /** Draws the pixel specified by the x and y co-ordinates using the specified color.
          * @param x - The x co-ordinate of the pixel.
          * @param y - The y co-ordinate of the pixel.
          * @param color - The color of the pixel to set.
          */
         public SetPixel(x: number, y: number, color: string) {
+            var ctx = this.RenderingContext;
+            var px = ctx.createImageData(1, 1);
+            var parsedColor = this.parseCSSColor(color);
+            px.data[0] = parsedColor[0];
+            px.data[1] = parsedColor[1];
+            px.data[2] = parsedColor[2];
+            px.data[3] = parsedColor[3];
+            ctx.putImageData(px, x, y);
         }
 
         /**
