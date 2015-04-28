@@ -1,6 +1,7 @@
 ///<reference path="../SmallBasic/GraphicsWindow.ts" />
+GraphicsWindow.Height = 800;
+GraphicsWindow.Width = 800;
 GraphicsWindow.BackgroundColor = "Black";
-
 var x = 100;
 var y = 100;
 
